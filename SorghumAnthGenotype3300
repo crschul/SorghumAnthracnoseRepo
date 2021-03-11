@@ -1,0 +1,32 @@
+#!/bin/bash
+
+########### Edit the info below before your run!!
+
+workdir=/home/coreyschultz/1.Projects/2.Sorghum.Resistance.Project/1.Sorghum.Data/Working/8400SNPs
+cd $workdir
+database=$workdir/Sobi8400DB 
+#contigs=$workdir/Sobic05G172300contigB.fa
+consens=$workdir/Sobic05G228400cons.fasta
+
+echo Good Job Corey!
+
+##turn my consensus sequence into a databast to blast agaisnt
+makeblastdb -in $consens -dbtype nucl -out $workdir/Sobi8400DB 
+echo Database made
+
+##blast my contigs file against the consensus database
+for F in $workdir/Sobic05G228400/*.TXT
+do
+	blastn -db $database -query $F -num_threads 4 -out ${F%.*}.txt
+done
+
+echo Blast Complete!
+
+for F in $workdir/Sobic05G228400/*.txt
+do
+	mv $F $workdir/8400BLASTs
+done
+
+
+###### Run 1: Sobic05G228400 (8400)
+
